@@ -1,33 +1,29 @@
-import uuid
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
 
-from sqlalchemy import Boolean
-from sqlalchemy import Column
-from sqlalchemy import DateTime
-from sqlalchemy import String
-from sqlalchemy.sql import func
-
-from app.database.base import Base
+from app.models.base import BaseModel
 
 
-class User(Base):
+class User(BaseModel):
+
     __tablename__ = "users"
 
-    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    username: Mapped[str] = mapped_column(unique=True)
 
-    username = Column(String(50), unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(unique=True)
 
-    email = Column(String(150), unique=True, nullable=False)
+    password: Mapped[str]
 
-    password = Column(String(255), nullable=False)
+    display_name: Mapped[str]
 
-    display_name = Column(String(120))
+    avatar: Mapped[str | None]
 
-    avatar = Column(String(255))
+    bio: Mapped[str | None]
 
-    status = Column(String(30), default="public")
+    gender: Mapped[str | None]
 
-    role = Column(String(30), default="member")
+    role: Mapped[str] = mapped_column(default="member")
 
-    is_active = Column(Boolean, default=True)
+    status: Mapped[str] = mapped_column(default="public")
 
-    created_at = Column(DateTime, server_default=func.now())
+    is_active: Mapped[bool] = mapped_column(default=True)
